@@ -47,36 +47,36 @@ MONITOR_SLEEP_TIME = 5
 
 GITHUB = {
     "URL": "https://api.github.com",
-    "owner": "ehendrix23",
+    "owner": "tookdes",
     "repo": "tesla_dashcam",
 }
 
 FFMPEG = {
     "darwin": "ffmpeg",
-    "win32": "ffmpeg.exe",
-    "cygwin": "ffmpeg",
-    "linux": "ffmpeg",
-    "freebsd11": "ffmpeg",
+#    "win32": "ffmpeg.exe",
+#    "cygwin": "ffmpeg",
+#    "linux": "ffmpeg",
+#    "freebsd11": "ffmpeg",
 }
 
 # noinspection PyPep8
 MOVIE_HOMEDIR = {
     "darwin": "Movies/Tesla_Dashcam",
-    "win32": "Videos\Tesla_Dashcam",
-    "cygwin": "Videos/Tesla_Dashcam",
-    "linux": "Videos/Tesla_Dashcam",
-    "freebsd11": "Videos/Tesla_Dashcam",
+#    "win32": "Videos\Tesla_Dashcam",
+#    "cygwin": "Videos/Tesla_Dashcam",
+#    "linux": "Videos/Tesla_Dashcam",
+#    "freebsd11": "Videos/Tesla_Dashcam",
 }
 
 DEFAULT_CLIP_HEIGHT = 960
 DEFAULT_CLIP_WIDTH = 1280
 
 MOVIE_QUALITY = {
-    "HIGH": "18",
-    "MEDIUM": "20",
-    "LOW": "23",
-    "LOWER": "28",
-    "LOWEST": "33",
+    "HIGH": "70",
+    "MEDIUM": "60",
+    "LOW": "50",
+    "LOWER": "40",
+    "LOWEST": "30",
 }
 
 MOVIE_ENCODING = {
@@ -96,10 +96,10 @@ MOVIE_ENCODING = {
 
 DEFAULT_FONT = {
     "darwin": "/Library/Fonts/Arial Unicode.ttf",
-    "win32": "/Windows/Fonts/arial.ttf",
-    "cygwin": "/cygdrive/c/Windows/Fonts/arial.ttf",
-    "linux": "/usr/share/fonts/truetype/freefont/FreeSans.ttf",
-    "freebsd11": "/usr/share/local/fonts/freefont-ttf/FreeSans.ttf",
+#    "win32": "/Windows/Fonts/arial.ttf",
+#    "cygwin": "/cygdrive/c/Windows/Fonts/arial.ttf",
+#    "linux": "/usr/share/fonts/truetype/freefont/FreeSans.ttf",
+#    "freebsd11": "/usr/share/local/fonts/freefont-ttf/FreeSans.ttf",
 }
 
 HALIGN = {"LEFT": "10", "CENTER": "(w/2-text_w/2)", "RIGHT": "(w-text_w)"}
@@ -119,9 +119,9 @@ TOASTER_INSTANCE = None
 
 display_ts = False
 
-PLATFORM = sys.platform
+#PLATFORM = sys.platform
 # Allow setting for testing.
-# PLATFORM = "darwin"
+PLATFORM = "darwin"
 # PLATFORM = "win32"
 # PLATFORM = "linux"
 
@@ -3072,54 +3072,10 @@ def notify_macos(title, subtitle, message):
     except Exception as exc:
         print(f"{get_current_timestamp()}Failed in notifification: {str(exc)}")
 
-
-def notify_windows(title, subtitle, message):
-    """ Notification on Windows """
-
-    # Section commented out, waiting to see if it really does not work on Windows 7
-    # This works only on Windows 10 9r Windows Server 2016/2019. Skipping for everything else
-    #    from platform import win32_ver
-    #    if win32_ver()[0] != 10:
-    #        return
-    global TOASTER_INSTANCE
-
-    # noinspection PyBroadException
-    try:
-        # noinspection PyUnresolvedReferences,PyPackageRequirements
-        from win10toast import ToastNotifier
-
-        if TOASTER_INSTANCE is None:
-            TOASTER_INSTANCE = ToastNotifier()
-
-        TOASTER_INSTANCE.show_toast(
-            threaded=True,
-            title=f"{title} {subtitle}",
-            msg=message,
-            duration=5,
-            icon_path=resource_path("tesla_dashcam.ico"),
-        )
-
-        run(["notify-send", f'"{title} {subtitle}"', f'"{message}"'])
-    except Exception:
-        pass
-
-
-def notify_linux(title, subtitle, message):
-    """ Notification on Linux """
-    try:
-        run(["notify-send", f'"{title} {subtitle}"', f'"{message}"'])
-    except Exception as exc:
-        print(f"{get_current_timestamp()}Failed in notifification: {str(exc)}")
-
-
 def notify(title, subtitle, message):
     """ Call function to send notification based on OS """
     if PLATFORM == "darwin":
         notify_macos(title, subtitle, message)
-    elif PLATFORM == "win32":
-        notify_windows(title, subtitle, message)
-    elif PLATFORM == "linux":
-        notify_linux(title, subtitle, message)
 
 
 def main() -> int:
@@ -3648,9 +3604,9 @@ def main() -> int:
 
         advancedencoding_group.add_argument(
             "--gpu_type",
-            choices=["nvidia", "intel", "qsv", "rpi", "vaapi"]
-            if PLATFORM == "linux"
-            else ["nvidia", "intel", "vaapi"],
+            choices=["nvidia", "intel", "qsv", "rpi", "vaapi"],
+#            if PLATFORM == "linux"
+#            else ["nvidia", "intel", "vaapi"],
             type=str.lower,
             help="Type of graphics card (GPU) in the system. This determines the encoder that will be used."
             "This parameter is mandatory if --gpu is provided.",
@@ -4089,21 +4045,12 @@ def main() -> int:
             return 0
 
         # noinspection PyPep8
-        temp_font_file = (
-            f"c:\{layout_settings.font.font}"
-            if PLATFORM == "win32"
-            else layout_settings.font.font
-        )
+        temp_font_file = (layout_settings.font.font)
         if not os.path.isfile(temp_font_file):
             print(
                 f"{get_current_timestamp()}Font file {temp_font_file} does not exist. Provide a valid font file using --font or"
                 f" disable timestamp using --no-timestamp"
             )
-            if PLATFORM == "linux":
-                print(
-                    f"{get_current_timestamp()}You can also install the fonts using for example: "
-                    f"apt-get install ttf-freefont"
-                )
             return 0
 
         # noinspection PyPep8,PyPep8,PyPep8
@@ -4145,7 +4092,7 @@ def main() -> int:
         input_clip = f"tmp{filter_counter}"
         filter_counter += 1
 
-    ffmpeg_params = ["-preset", args.compression, "-crf", MOVIE_QUALITY[args.quality]]
+    ffmpeg_params = ["-preset", args.compression, "-q:v", MOVIE_QUALITY[args.quality]]
 
     use_gpu = (
         getattr(args, "gpu", True)
@@ -4160,67 +4107,14 @@ def main() -> int:
 
         # For x265 add QuickTime compatibility
         if encoding == "x265":
-            video_encoding = video_encoding + ["-vtag", "hvc1"]
-
-        # GPU acceleration enabled
-        if use_gpu:
-            if PLATFORM == "darwin":
-                print(f"{get_current_timestamp()}GPU acceleration is enabled")
-                video_encoding = video_encoding + ["-allow_sw", "1"]
-                encoding = encoding + "_mac"
-
-            else:
-                if args.gpu_type is None:
-                    print(
-                        f"{get_current_timestamp()}Parameter --gpu_type is mandatory when parameter "
-                        f"--use_gpu is used."
-                    )
-                    return 0
-
-                # Confirm that GPU acceleration with this encoding is supported.
-                if MOVIE_ENCODING.get(encoding + "_" + args.gpu_type) is None:
-                    # It is not, defaulting then to no GPU
-                    print(
-                        f"{get_current_timestamp()}GPU acceleration not available for encoding {encoding} and GPU type {args.gpu_type}. GPU acceleration disabled."
-                    )
-                else:
-                    print(f"{get_current_timestamp()}GPU acceleration is enabled.")
-                    encoding = encoding + "_" + args.gpu_type
-
-                    # If using vaapi hw acceleration this takes the decoding and filter processing done in software
-                    # and passes it up to the GPU for hw accelerated encoding.
-                    if args.gpu_type == "vaapi":
-                        ffmpeg_hwupload = filter_string.format(
-                            input_clip=input_clip,
-                            filter=f"format=nv12,hwupload",
-                            filter_counter=filter_counter,
-                        )
-                        input_clip = f"tmp{filter_counter}"
-                        filter_counter += 1
-
-                        if PLATFORM == "linux":
-                            ffmpeg_hwdev = ffmpeg_hwdev + [
-                                "-vaapi_device",
-                                "/dev/dri/renderD128",
-                            ]
-                            ffmpeg_hwout = ffmpeg_hwout + [
-                                "-hwaccel_output_format",
-                                "vaapi",
-                            ]
-                    elif args.gpu_type == "qsv":
-                        if PLATFORM == "linux":
-                            ffmpeg_hwdev = ffmpeg_hwdev + [
-                                "-qsv_device",
-                                "/dev/dri/renderD128",
-                            ]
-                            ffmpeg_hwout = ffmpeg_hwout + ["-hwaccel", "qsv"]
-
-            bit_rate = str(int(10000 * layout_settings.scale)) + "K"
-            video_encoding = video_encoding + ["-b:v", bit_rate]
-
+            video_encoding = video_encoding + ["-vtag", "hvc1"] + ["-pix_fmt", "yuv420p"]
+        video_encoding = video_encoding + ["-allow_sw", "1"]
+        encoding = encoding + "_mac"
+#            bit_rate = str(int(10000 * layout_settings.scale)) + "K"
+#            video_encoding = video_encoding + ["-b:v", bit_rate]
         video_encoding = video_encoding + ["-c:v", MOVIE_ENCODING[encoding]]
     else:
-        video_encoding = video_encoding + ["-c:v", args.enc]
+        video_encoding = video_encoding + ["-c:v", args.enc] + ["-pix_fmt", "yuv420p"]
 
     ffmpeg_params = ffmpeg_params + video_encoding
 
