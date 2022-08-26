@@ -64,10 +64,7 @@ Requirements
 -------------
 
 This package relies on `ffmpeg <https://ffmpeg.org>`__ to be installed, this is a free, open source cross-platform
-solution to convert video. The created executables for Windows and MacOS include an ffmpeg version.
-
-If not using the executables (Windows and MacOS) then `Python <https://www.python.org>`__ 3.8.6 or higher is required.
-
+solution to convert video. Or just download a binary and use --ffmpeg.
 
 Example
 -------
