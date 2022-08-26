@@ -1,14 +1,9 @@
-.. image:: https://img.shields.io/github/downloads/ehendrix23/tesla_dashcam/total
-   :target: https://img.shields.io/github/downloads/ehendrix23/tesla_dashcam/total
-.. image:: https://img.shields.io/github/downloads/ehendrix23/tesla_dashcam/latest/total
-   :target: https://GitHub.com/ehendrix23/tesla_dashcam/releases/
-.. image:: https://img.shields.io/pypi/dm/tesla-dashcam
-   :target: https://pypi.python.org/pypi/tesla-dashcam/
-
-tesla_dashcam
-=============
+tesla_dashcam for mac
+=====================
 
 Python program that provides an easy method to merge saved Tesla Dashcam footage into a single video.
+
+Customized for Mac, especially for ARM Mac.
 
 When saving Tesla Dashcam footage a folder is created on the USB drive for each event and within it multiple MP4 video files are
 created. Currently the dashcam leverages four (4) cameras (front, rear, left repeater, and right repeater) and will create a
@@ -52,24 +47,6 @@ And **Update Check** will make sure you always have the latest version available
 Check out the Usage section of this README to get more information on all available parameters and what each does.
 
 
-Binaries
---------
-
-Stand-alone binaries can be retrieved from:
-
-- Windows: https://github.com/ehendrix23/tesla_dashcam/releases/latest/download/tesla_dashcam.zip
-- MacOS (OSX): https://github.com/ehendrix23/tesla_dashcam/releases/latest/download/tesla_dashcam.dmg
-
-`ffmpeg <https://www.ffmpeg.org/legal.html>`_ is included within the respective package.
-ffmpeg is a separately licensed product under the `GNU Lesser General Public License (LGPL) version 2.1 or later <http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html>`_.
-FFmpeg incorporates several optional parts and optimizations that are covered by the GNU General Public License (GPL) version 2 or later. If those parts get used the GPL applies to all of FFmpeg.
-For more information on ffmpeg license please see: https://www.ffmpeg.org/legal.html
-
-Windows binary of ffmpeg was downloaded from: https://ffmpeg.zeranoe.com/builds/
-
-MacOS binary of ffmpeg was downloaded from: https://www.osxexperts.net
-
-
 Notes
 -----
 
@@ -92,24 +69,17 @@ solution to convert video. The created executables for Windows and MacOS include
 If not using the executables (Windows and MacOS) then `Python <https://www.python.org>`__ 3.8.6 or higher is required.
 
 
-Installation
--------------
-
-Downloading the respective bundle (ZIP for Windows, DMG for MacOS) and unpacking this in a location of your choosing is
-sufficient to install this.
-
-If downloading the source files (i.e. for Linux) then Python has to be installed as well. I recommend in that case to
-install the package from pypi using pip to ensure all package requirements (except for ffmpeg) are met.
-
-This package is available from `pypi <https://pypi.org/project/tesla-dashcam/>`__.
-
-Install from pypi is done through:
+Example
+-------
 
 .. code:: bash
 
-    python3 -m pip install tesla_dashcam
+    python3 tesla_dashcam.py --layout WIDESCREEN --motion_only --gpu --encoding x265 --rear --output ~/Movies/TeslaDashCAM --quality MEDIUM --compression veryslow --fps 30 --no-check_for_update
 
 
+.. code:: bash
+
+    python3 tesla_dashcam.py --layout WIDESCREEN --motion_only --rear --output ~/Movies/TeslaDashCAM --quality MEDIUM --compression veryslow --fps 30 --no-check_for_update --enc hevc_videotoolbox
 
 Usage
 -----
@@ -300,12 +270,8 @@ Usage
     Advanced encoding settings:
       Advanced options for encoding
 
-      --no-gpu              Disable use of GPU acceleration. Default on Apple Silicon Mac and on Non-MACs.                            
-      --gpu                 Use GPU acceleration. Default on Intel Macs.
-                            Note: ffmpeg currently seems to have issues on Apple Silicon with GPU acceleration, --no-gpu might need to be set to produce video.
-                            --gpu_type has to be provided as well on Non-Macs when enabling this parameter (default: False)
-      --gpu_type {nvidia,intel,qsv,rpi,vaapi}
-                            Type of graphics card (GPU) in the system. This determines the encoder that will be used.This parameter is mandatory if --gpu is provided on Non-Macs. (default: None)
+      --no-gpu              Disable use of GPU acceleration.
+      --gpu                 Use GPU acceleration.
       --no-faststart        Do not enable flag faststart on the resulting video files. Use this when using a network share and errors occur during encoding. (default: False)
       --quality {LOWEST,LOWER,LOW,MEDIUM,HIGH}
                             Define the quality setting for the video, higher quality means bigger file size but might not be noticeable. (default: LOWER)
@@ -1080,22 +1046,6 @@ Having a text file (i.e. my_preference.txt) with the following contents:
 
 And then executing tesla_dashcam as follows:
 
-* Windows:
-
-.. code:: bash
-
-    tesla_dashcam.exe "@my_preference.txt"
-
-* Mac:
-
-.. code:: bash
-
-    tesla_dashcam @my_preference.txt
-
-* Linux:
-
-.. code:: bash
-
     python3 tesla_dashcam.py @my_preference.txt
 
 Would result in the same as if those parameters were provided on the command itself. One can also combine a parameter file with parameters on the command line.
@@ -1119,42 +1069,10 @@ Examples
 
 To show help:
 
-* Windows:
-
-.. code:: bash
-
-    tesla_dashcam.exe -h
-
-* Mac:
-
-.. code:: bash
-
-    tesla_dashcam -h
-
-* Linux:
-
-.. code:: bash
-
     python3 tesla_dashcam.py -h
 
 
 Using defaults:
-
-* Windows:
-
-.. code:: bash
-
-    tesla_dashcam.exe c:\Tesla\2019-02-27_14-02-03
-
-* Mac:
-
-.. code:: bash
-
-    tesla_dashcam /Users/me/Desktop/Tesla/2019-02-27_14-02-03
-
-* Linux:
-
-.. code:: bash
 
     python3 tesla_dashcam.py /home/me/Tesla/2019-02-27_14-02-03
 
@@ -1162,141 +1080,29 @@ Using defaults but not knowing what to provide for source path. Goal to only pro
 Store the resulting video files in c:\Tesla (Windows) or /Users/me/Desktop/Tesla (MacOS). Delete the files from the
 USB (or SD) when processed.
 
-* Windows:
-
-.. code:: bash
-
-    tesla_dashcam.exe --monitor_once --delete_source --output c:\Tesla SavedClips
-
-* Mac:
-
-.. code:: bash
-
-    tesla_dashcam --monitor_once --delete_source --output /Users/me/Desktop/Tesla SavedClips
-
-* Linux:
-
-.. code:: bash
-
     python3 tesla_dashcam.py --monitor_once --delete_source --output /home/me/Tesla SavedClips
 
 Specify video file and location:
-
-* Windows:
-
-.. code:: bash
-
-    tesla_dashcam.exe --output c:\Tesla\My_Video_Trip.mp4 c:\Tesla\2019-02-27_14-02-03
-
-* Mac:
-
-.. code:: bash
-
-    tesla_dashcam --output /Users/me/Desktop/Tesla/My_Video_Trip.mp4 /Users/me/Desktop/Tesla/2019-02-27_14-02-03
-
-* Linux:
-
-.. code:: bash
 
     python3 tesla_dashcam.py --output /home/me/Tesla/My_Video_Trip.mp4 /home/me/Tesla/2019-02-27_14-02-03
 
 Without timestamp:
 
-* Windows:
-
-.. code:: bash
-
-    tesla_dashcam.exe --no-timestamp c:\Tesla\2019-02-27_14-02-03
-
-* Mac:
-
-.. code:: bash
-
-    tesla_dashcam --no-timestamp /Users/me/Desktop/Tesla/2019-02-27_14-02-03
-
-* Linux:
-
-.. code:: bash
-
     python3 tesla_dashcam.py --no-timestamp /home/me/Tesla/2019-02-27_14-02-03
 
 Put timestamp center top in yellowgreen:
-
-* Windows:
-
-.. code:: bash
-
-    tesla_dashcam.exe --fontcolor yellowgreen@0.9 -halign CENTER -valign TOP c:\Tesla\2019-02-27_14-02-03
-
-* Mac:
-
-.. code:: bash
-
-    tesla_dashcam --fontcolor yellowgreen@0.9 -halign CENTER -valign TOP /Users/me/Desktop/Tesla/2019-02-27_14-02-03
-
-* Linux:
-
-.. code:: bash
 
     python3 tesla_dashcam.py --fontcolor yellowgreen@0.9 -halign CENTER -valign TOP /home/me/Tesla/2019-02-27_14-02-03
 
 Layout so front is shown top middle with side cameras below it and font size of 24 (FULLSCREEN):
 
-* Windows:
-
-.. code:: bash
-
-    tesla_dashcam.exe --layout FULLSCREEN --fontsize 24 c:\Tesla\2019-02-27_14-02-03
-
-* Mac:
-
-.. code:: bash
-
-    tesla_dashcam --layout FULLSCREEN --fontsize 24 /Users/me/Desktop/Tesla/2019-02-27_14-02-03
-
-* Linux:
-
-.. code:: bash
-
     python3 tesla_dashcam.py --layout FULLSCREEN --fontsize 24 /home/me/Tesla/2019-02-27_14-02-03
 
 Specify location of ffmpeg binary (in case ffmpeg is not in path):
 
-* Windows:
-
-.. code:: bash
-
-    tesla_dashcam.exe --ffmpeg c:\ffmpeg\ffmpeg.exe c:\Tesla\2019-02-27_14-02-03
-
-* Mac:
-
-.. code:: bash
-
-    tesla_dashcam --ffmpeg /Applications/ffmpeg /Users/me/Desktop/Tesla/2019-02-27_14-02-03
-
-* Linux:
-
-.. code:: bash
-
-    python3 tesla_dashcam.py --ffmpeg /home/me/ffmpeg /home/me/Tesla/2019-02-27_14-02-03
+python3 tesla_dashcam.py --ffmpeg /home/me/ffmpeg /home/me/Tesla/2019-02-27_14-02-03
 
 Layout of PERSPECTIVE with a different font for timestamp and path for ffmpeg:
-
-* Windows: Note how to specify the path, : and \ needs to be escaped by putting a \ in front of them.
-
-.. code:: bash
-
-    tesla_dashcam.exe --layout PERSPECTIVE --ffmpeg c:\ffmpeg\ffmpeg.exe --font "C\:\\Windows\\Fonts\\Courier New.ttf" c:\Tesla\2019-02-27_14-02-03
-
-* Mac:
-
-.. code:: bash
-
-    tesla_dashcam --layout PERSPECTIVE --ffmpeg /Applications/ffmpeg --font '/Library/Fonts/Courier New.ttf' /Users/me/Desktop/Tesla/2019-02-27_14-02-03
-
-* Linux:
-
-.. code:: bash
 
     python3 tesla_dashcam.py --layout PERSPECTIVE --ffmpeg /Applications/ffmpeg --font '/usr/share/fonts/truetype/freefont/Courier New.ttf' /home/me/Tesla/2019-02-27_14-02-03
 
@@ -1304,44 +1110,12 @@ Enable monitoring for the Tesla Dashcam USB (or SD) to be inserted and then proc
 Increase speed of resulting videos tenfold and store all videos in folder specified by output.
 Delete the source files afterwards:
 
-
-.. code:: bash
-
-    tesla_dashcam.exe --speed 10 --output c:\Tesla\ --monitor .
-
-* Mac:
-
-.. code:: bash
-
-    tesla_dashcam /Users/me/Desktop/Tesla --monitor .
-
-* Linux:
-
-.. code:: bash
-
     python3 tesla_dashcam.py /home/me/Desktop/Tesla --monitor .
-
 
 Enable one-time monitoring for the Tesla Dashcam USB (or SD) to be inserted and then process all the files from SavedClips.
 Note that for source we provide the folder name (SavedClips), the complete path will be created by the program.
 Slowdown speed of resulting videos to half, show left/right cameras as if looking backwards, store all videos in folder specified by output.
 Also create a movie file that has them all merged together.
-
-* Windows:
-
-.. code:: bash
-
-    tesla_dashcam.exe --slowdown 2 --rear --merge --output c:\Tesla\ --monitor_once SavedClips
-
-* Mac:
-
-.. code:: bash
-
-    tesla_dashcam --slowdown 2 --rear --merge --output /Users/me/Desktop/Tesla --monitor_once SavedClips
-
-* Linux:
-
-.. code:: bash
 
     python3 tesla_dashcam.py --slowdown 2 --rear --merge --output /home/me/Tesla --monitor_once SavedClips
 
@@ -1351,231 +1125,4 @@ path of the trigger file (if it is a file) or folder. Videos are stored in folde
 the folders are then merged into 1 folder with name TeslaDashcam followed by timestamp of processing (timestamp is
 added automatically). Chapter offset is set to be 2 minutes (120 seconds) before the end of the respective folder clips.
 
-* Windows:
-
-.. code:: bash
-
-    tesla_dashcam.exe --merge --chapter_offset -120 --output c:\Tesla\TeslaDashcam.mp4 --monitor --monitor_trigger x:\TeslaCam\start_processing.txt SavedClips
-
-* Mac:
-
-.. code:: bash
-
-    tesla_dashcam --merge --chapter_offset -120 --output /Users/me/Desktop/Tesla --monitor --monitor_trigger /Users/me/TeslaCam/start_processing.txt SavedClips
-
-* Linux:
-
-.. code:: bash
-
     python3 tesla_dashcam.py --merge --chapter_offset -120 --output /home/me/Tesla --monitor --monitor_trigger /home/me/TeslaCam/start_processing.txt SavedClips
-
-
-Support
--------
-
-There is no official support nor should there be any expectation for support to be provided. As per license this is
-provided As-Is.
-However, any issues or requests can be reported on `GitHub <https://github.com/ehendrix23/tesla_dashcam/issues>`__ and
-I will do my best (time permitting) to provide support.
-
-
-Release Notes
--------------
-
-0.1.4:
-    - Initial Release
-0.1.5:
-    - Fixed: font issue on Windows
-0.1.6:
-    - Changed: Output folder is now optional
-    - Changed: Source is positional argument (in preparation for self-contained executable and drag&drop)
-0.1.7:
-    - New: Added perspective layout (thanks to `lairdb <https://model3ownersclub.com/members/lairdb.16314/>`__ from `model3ownersclub <https://model3ownersclub.com>`__ forums to provide this layout).
-    - New: Added font size option to set the font size for timestamp
-    - New: Added font color option to set the font color for timestamp
-    - New: Added halign option to horizontally align timestamp (left, center, right)
-    - New: Added valign option to vertically align timestamp (top, middle, bottom)
-    - Changed: Perspective is now default layout.
-0.1.8:
-    - New: Added GPU hardware accelerated encoding for Mac and PCs with NVIDIA. On Mac it is enabled by default
-    - New: Added option to have video from side cameras be shown as if one were to look at it through the mirror (option --mirror). This is now the default
-    - New: Added option --rear to show video from side cameras as if one was looking to the rear of the car. This was how it was originally.
-    - New: Added option to swap left and right camera in output. Mostly beneficial in FULLSCREEN with --rear option as it then seems like it is from a rear camera
-    - New: Added option to speedup (--speedup) or slowdown (--slowdown) the video.
-    - New: Added option to provide a different encoder for ffmpeg to use. This is for those more experienced with ffmpeg.
-    - New: Added a default font path for Linux systems
-    - New: Added --version to get the version number
-    - New: Releases will now be bundled in a ZIP file (Windows) or a DMG file (MacOS) with self-contained executables in them. This means Python does not need to be installed anymore (located on github)
-    - New: ffmpeg executable binary for Windows and MacOS added into respective bundle.
-    - Changed: For output (--output) one can now also just specify a folder name. The resulting filename will be based on the name of the folder it is then put in
-    - Changed: If there is only 1 video file for merging then will now just rename intermediate (or copy if --keep-intermediate is set).
-    - Changed: The intermediate files (combining of the 3 cameras into 1 video file per minute) will now be written to the output folder if one provided.
-    - Changed: The intermediate files will be deleted once the complete video file is created. This can be disabled through option --keep-intermediate
-    - Changed: Set FULLSCREEN back as the default layout
-    - Changed: Help output (-h) will show what default value is for each parameter
-    - Changed: Cleaned up help output
-    - Changed: Default path for ffmpeg will be set to same path as tesla_dashcam is located in, if not exist then default will be based that ffmpeg is part of PATH.
-    - Fixed: Now able to handle if a camera file is missing, a black screen will be shown for that duration for the missing file
-    - Fixed: Fixed (I believe) cygwin path for fonts.
-0.1.9:
-    - New: Added scanning of sub-folders clip files. Each folder will be processed and resulting movie file created. This can be disabled through parameter --exclude_subdirs
-    - New: Added option to merge the video files from multiple sub-folders into 1 movie file. Use parameter --merge to enable.
-    - New: Added option to monitor if the USB drive (or SD card) is inserted in the PC and then automatically start processing the files. Use parameter --monitor to enable.
-      Parameter --monitor_once will stop monitoring and exit after 1st time drive was inserted.
-      Parameter --delete_source will delete the source files and folder once the movie file for that folder has been created.
-    - New: Added update checker to determine if there is a newer version, additional arguments to just perform check (--check_for_update), include test releases (--include_test), or disable always checking for updates (--no-check_for_update)
-    - New: ffmpeg is part of the tesla_dashcam executable
-    - New: Desktop notification when processing starts (when using monitor) and when it completes.
-    - New: DockerFile added making it easy to run tesla_dashcam within Docker (jeanfabrice)
-    - New: Time it took to create the video files will now be provided upon completion of processing.
-    - Changed: Formatted output to easily show progress
-    - Fixed: Will now handle it much better if a video file from a camera is corrupt (i.e. zero-byte file).
-    - Fixed: combining clips to movie would not use GPU or provided encoding.
-    - Fixed: Added additional check that video file exist before merging into movie.
-0.1.10:
-    - New: Added scale option to set the scale of the clips and thus resulting video. (--scale)
-    - New: Added option to specify a parameter file using @<filename> where parameters can be located in. (@<filename>)
-    - New: One can now specify multiple sources instead of just 1.
-    - New: Individual file(s) can now be provided as a source as well (only 1 camera filename has to be provided to get all 3)
-    - New: Source is now optional, if not provided then it will be same as --monitor_once with as source SavedClips.
-    - Changed: Timestamp within video will now be used for concatenation of the clips at folder level and all (--merge option) instead of filename. This will ensure that even when crossing timezones the order of the video is still accurate.
-    - Changed: --delete_source will delete source files when specified even when --monitor or --monitor_once is not specified `Issue #28 <https://github.com/ehendrix23/tesla_dashcam/issues/28>`_
-    - Changed: output will default to Videos\Tesla_Dashcam (Windows) Movies/Tesla_Dashcam (MacOS), or Videos\Tesla_Dashcam (Linux) if not output folder specified.
-    - Changed: Filename for the folder video files will not have start and end timestamp in local timezone instead of just folder name. `Issue #30 <https://github.com/ehendrix23/tesla_dashcam/issues/30>`_ and `Issue #33 <https://github.com/ehendrix23/tesla_dashcam/issues/33>`_
-    - Changed: Updated release notes for each release better identifying what is new, changed, and fixed.
-    - Fixed: issue where sometimes encoding with GPU would fail by also allowing software based encoding
-    - Fixed: traceback when unable to retrieve latest release from GitHub
-    - Fixed: running tesla_dashcam when installed using pip. `Issue #23 <https://github.com/ehendrix23/tesla_dashcam/issues/23>`_ and `Issue #31 <https://github.com/ehendrix23/tesla_dashcam/issues/31>`_
-    - Fixed: Folder clip would be removed if only 1 set in folder with same name as folder name if keep_intermediate not specified
-    - Fixed: Font issue in Windows (hopefully final fix) `Issue #29 <https://github.com/ehendrix23/tesla_dashcam/issues/29>`_
-    - Fixed: Python version has to be 3.7 or higher due to use of capture_output `Issue #19 <https://github.com/ehendrix23/tesla_dashcam/issues/19>`_
-0.1.11:
-    - Fixed: Traceback when getting ffmpeg path in Linux `Issue #39 <https://github.com/ehendrix23/tesla_dashcam/issues/39>`_
-    - Fixed: Running tesla_dashcam when installed using pip. `Issue #38 <https://github.com/ehendrix23/tesla_dashcam/issues/38>`_
-    - Fixed: Just providing a filename for output would result in traceback.
-    - Fixed: When providing a folder as output it would be possible that the last folder name was stripped potentially resulting in error.
-0.1.12:
-    - New: Added chapter markers in the concatenated movies. Folder ones will have a chapter marker for each intermediate clip, merged one has a chapter marker for each folder.
-    - New: Option --chapter_offset for use with --merge to offset the chapter marker in relation to the folder clip.
-    - New: Added flag -movstart +faststart for video files better suited with browsers etc. (i.e. YouTube). Thanks to sf302 for suggestion.
-    - New: Option to add trigger (--monitor_trigger_file) to use existence of a file/folder/link for starting processing instead of USB/SD being inserted.
-    - Changed: Method for concatenating the clips together has been changed resulting in massive performance improvement (less then 1 second to do concatenation). Big thanks to sf302!
-    - Fixed: Folders will now be deleted if there are 0-byte or corrupt video files within the folder `Issue #40 <https://github.com/ehendrix23/tesla_dashcam/issues/40>`_
-    - Fixed: Providing a filename for --output would create a folder instead and not setting resulting file to filename provided `Issue #52 <https://github.com/ehendrix23/tesla_dashcam/issues/52>`_
-    - Fixed: Thread exception in Windows that ToastNotifier does not have an attribute classAtom (potential fix). `Issue #54 <https://github.com/ehendrix23/tesla_dashcam/issues/54>`_
-    - Fixed: Traceback when invalid output path (none-existing) is provided or when unable to create target folder in given path.
-    - Fixed: Including sub dirs did not work correctly, it would only grab the 1st folder.
-    - Fixed: When using monitor, if . was provided as source then nothing would be processed. Now it will process everything as intended.
-    - Fixed: File created when providing a filename with --output and --monitor option did not put timestamp in filename to ensure unique filenames
-    - Fixed: Argument to get release notes was provided incorrectly when checking for updates. Thank you to demonbane for fixing.
-0.1.13:
-    - New: Support for rear camera (introduced in V10). This also results in layouts having been modified to allow inclusion of rear camera. `Issue #71 <https://github.com/ehendrix23/tesla_dashcam/issues/71>`_
-    - New: Support for hardware encoding for systems with supported Intel GPUs.
-    - New: Support for hardware encoding on Raspberry Pi (RPi) (H.264 only) `Issue #66 <https://github.com/ehendrix23/tesla_dashcam/issues/66>`_
-    - New: Layout CROSS with front camera top centered, side camera underneath it, and rear camera then underneath side cameras centered.
-    - New: Layout DIAMOND with front camera top centered, rear camera under front and side camera centered at the left and right of front&rear.
-    - New: Option --motion_only to fast-forward through the portions in the video that does not have anything motion (done through removal of duplicate frames). Thanks to supRy for providing this
-    - New: Option --skip_existing to skip creation of video files that already exist. Existence only is checked, not if layout etc are the same.
-    - New: Option --perspective for showing side cameras to be displayed in perspective mode irrespective of layout. Layout PERSPECTIVE is thus same as layout FULLSCREEN with --perspective option.
-    - New: Options --start_offset and --end_offset can be used to provide starting and ending offset in seconds for resulting video (at folder level).
-    - New: Options --start_timestamp and --end_timestamp can be used to restrict resulting video (and processing) to specific timestamps. This can be used in combination with --start_offset and/or --end_offset
-    - New: Options --no-front, --no-left, --no-right, and --no-rear to exclude camera(s) from the videos
-    - New: Option --gpu_type to provide GPU installed in the system for Windows/Linux. Current supported options are nvidia, intel, and RPi.
-    - New: Option  --no-faststart for not setting the faststart flag in the video files as doing this can result in encoding failures on network shares `Issue #62 <https://github.com/ehendrix23/tesla_dashcam/issues/62>`_
-    - New: Option --temp_dir to provide a different path to store the temporary video files that are created `Issue #67 <https://github.com/ehendrix23/tesla_dashcam/issues/67>`_
-    - New: Description metadata to include video was created by tesla_dashcam with version number.
-    - Changed: WIDESCREEN layout will now by default show the front camera on top with higher resolution compared to others due to incorporation of rear camera
-    - Changed: Include folder SentryClips in default source list if no source provided (SavedClips was already default).
-    - Changed: Check to ensure that Python version is at required level or higher (currently 3.7).
-    - Changed: Existence of font file (provided or default) will be checked and error returned if not existing.
-    - Changed: Existence of ffmpeg will be checked and error returned if not existing.
-    - Changed: If no filename provided for merged video then current date/time will be used for filename.
-    - Fixed: Merge of videos fails when a relative path instead of an absolute path is provided for --output `Issue #62 <https://github.com/ehendrix23/tesla_dashcam/issues/62>`_
-    - Fixed: Issue during processing of metadata if files were missing
-    - Fixed: Hidden files (files starting with period) on Mac/Linux were not ignored. This could cause issues as some programs might create these files when viewing the video.
-0.1.14:
-    - Fixed: Checking if font path exist in Windows failed.
-0.1.15:
-    - Changed: Reduced sensitivity for motion detection
-    - Changed: Minor improvement for font path checking, mainly message provided.
-    - Fixed: Rear view camera filename was changed from -rear_view to -back in TeslaCam folders. `Issue #78 <https://github.com/ehendrix23/tesla_dashcam/issues/78>`_
-    - Fixed: Missing python-dateutil package when installing from PIP `Issue #77 <https://github.com/ehendrix23/tesla_dashcam/issues/77>`_
-    - Fixed: Missing fonts in Docker Image (thanks to moorecp for providing fix)
-    - Fixed: Only the 1st source was processed When using MONITOR or MONITOR_ONCE, or with V10 only SavedClips was processed when not providing a source
-0.1.16:
-    - New: Option --scale now accepts value of camera=<front, rear, left, right>. to set the scale of for each camera individually (value of 1 is 1280x960 for the clip)
-    - New: Option --swap_frontrear to swap front&rear cameras in output.
-    - New: Option --background to specify background color (default is black).
-    - New: Option --fps to set the frame rate for resulting video. Default is set to 24 (Tesla records at about 33 fps). `Issue #85 <https://github.com/ehendrix23/tesla_dashcam/issues/85>`_
-    - New: Parameter file (provided using @) can now include comments (specify using #)
-    - New: Option --loglevel to allow for debug information to be printed.
-    - Changed: --speedup and --slowdown now accepts a float allowing for example to speed video up by 1.5
-    - Changed: Option --scale also accept fixed resolution (i.e. 640x480) for the clip.
-    - Changed: View of rear camera will be mirrored as well if side cameras are shown as mirror
-    - Changed: For all layouts default is to show mirror for rear&side if front camera is shown, otherwise show as rear viewing.
-    - Changed: Swap left&right cameras when showing rear&side as rear viewing, and not to swap them when showing rear&side as mirror view.
-    - Changed: Re-organized help (-h) for all parameters by grouping them.
-    - Changed: Added message to install fonts using apt-get install ttf-freefont on Linux if font file is not found.
-    - Changed: Only execute if we're main allowing to be imported into other scripts. `Issue #94 <https://github.com/ehendrix23/tesla_dashcam/issues/94>`_
-    - Changed: Cleaned-up this README file to provide better information.
-    - Fixed: Providing paths with spaces did not work in parameter files even although it worked from command line. `Issue #89 <https://github.com/ehendrix23/tesla_dashcam/issues/89>`_
-    - Fixed: Changed Arial font on MacOS to Arial Unicode (from Arial) as it seems Arial is not available anymore on MacOS 10.15 (Catalina). `Issue #64 <https://github.com/ehendrix23/tesla_dashcam/issues/64>`_
-    - Fixed: Incorrect encoder for x265 with Intel GPU hardware encoding - mbaileys
-0.1.17:
-    - New: Option --text_overlay_fmt to set the overlay text for the video. Contributed by JakeShirley
-    - New: Option --timestamp_format for formatting timestamps.
-    - New: Option --sentry_offset to set the start and end offset based on Sentry event timestamp.
-    - New: Option --merge_template to allow merging of video files grouped based on this. Resulting movie filename will be based on this template.
-    - New: Option --set_moviefile_timestamp to set the video file timestamp on the OS to start, end, or time of Sentry event.
-    - New: Option --keep-events to keep event video files after they have been merged into a video.
-    - New: Option --display_ts to show timestamps in the text output. This does not impact video output but is handy when using a monitor option. Contributed by croadfeldt
-    - New: Option --title_screen_map, which generates a map of the event location and displays it for the first 3 seconds of the movie.
-    - New: Added support for event information file and ability to display it in the overlay text. Contributed by JakeShirley
-    - New: Support for FreeBSD 11. Contributed by busbyjon
-    - New: Source can now include wildcards, shell variables, and will do user expansion (i.e. ~ on Unix, ~user on Windows).
-    - New: Output and temp_dir can now include shell variables and will do user expansion (i.e. ~ on Unix, ~user on Windows).
-    - New: Metadata tag title in video file is now set to reason for event (if exist) and timestamp or start/end timestamp
-    - New: Metadata tag creation_time in video files created is now set to start timestamp of that particular video.
-    - New: When scanning folders a message will be printed after every 10 folders scanned to show progress.
-    - New: --gpu and --no-gpu are now valid arguments irrespective of platform.  
-    - New: event and final movie files will now include GPS coordinates with the location for an event. For movies this will be for the 1st event within the movie.
-    - Changed: Improvement for Docker file size and stability. Contributed by magicalyak
-    - Changed: Choice values forrparameters (i.e. FULLSCREEN, intel, black) are now case-insensitive.
-    - Changed: Updated supporting libraries to latest available.
-    - Fixed: When providing an invalid start or end timestamp will now result in a error instead of a traceback.
-    - Fixed: Added x265 compatibility tag for QuickTime. Contributed by dburkland
-    - Fixed: Event file will now be removed when providing an output file and only 1 event is processed, leaving only 1 movie file.
-    - Fixed: Providing a mount as a source resulted in it no files found. Now when a mount is provided it will be handled same as folders.
-0.1.18:
-    - Fixed: Traceback when running executable without providing --ffmpeg option.
-0.1.19:
-    - Fixed: Tracebacks when there is no events.json file `Issue #168 <https://github.com/ehendrix23/tesla_dashcam/issues/168>`_
-0.1.20:
-    - New: Option --sentry_start_offset to set the starting offset specifically for sentry based events
-    - New: Option --sentry_end_offset to set the ending offset specifically for sentry based events
-    - New: Added support for Intel VAAPI GPU acceleration (https://trac.ffmpeg.org/wiki/Hardware/VAAPI). Contributed by timrettop.
-    - New: Two new dockerfiles have been added. One to support NVIDIA and other one to support VAAPI. Contributed by magicalyak
-    - Changed (BREAKING): How offsets are calculated has been changed and can impact result if negative values were being provided for start_offset and/or end_offset!
-    - Changed: Updated Docketfile. Contributed by magicalyak
-    - Fixed: Resolved issue on Linux with default device initialization failure when using Intel GPU acceleration and multiple usable devices by adding new qsv gpu_type (https://trac.ffmpeg.org/ticket/7649). Contributed by timrettop.
-
-
-TODO
-----
-
-* Implement Jinja2 for templates
-* Implement templates for other options
-* Implement option to crop individual camera output
-* Option for end-user layout
-* Monitor path for new folders/files as trigger option
-* Provide option to copy or move from source to output folder before starting to process
-* Develop method to run as a service with --monitor option
-* GUI Front-end
-* Support drag&drop of video folder (supported in Windows now, MacOS not yet)
-* Add object detection (i.e. people) and possible output when object was detected
-* Saving of options
-* Use timestamp in video to ensure full synchronization between the 4 cameras
-* Add option for source/output to be S3 bucket (with temp folder for creating temporary files)
-* Develop Web Front-End
-* Develop method to have run in AWS, allowing user to upload video files and interact using Web Front-End
-
