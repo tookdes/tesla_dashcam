@@ -3608,15 +3608,9 @@ def main() -> int:
     )
 
     if PLATFORM == "darwin":
-        if PROCESSOR != "arm":
-            nogpuhelp = "R|Disable use of GPU acceleration, default is to use GPU acceleration.\n"
-            gpuhelp = "R|Use GPU acceleration (this is the default).\n"
-        else:
-            nogpuhelp = "R|Disable use of GPU acceleration, this is the default as currently ffmpeg has issues on Apple Silicon with GPU acceleration.\n"
-            gpuhelp = (
-                "R|Use GPU acceleration.\n"
-                "  Note: ffmpeg currently seems to have issues on Apple Silicon with GPU acceleration resulting in corrupt video.\n"
-            )
+        
+        nogpuhelp = "R|Disable use of GPU acceleration, default is to use GPU acceleration.\n"
+        gpuhelp = "R|Use GPU acceleration (this is the default).\n"
 
         advancedencoding_group.add_argument(
             "--no-gpu",
@@ -4155,8 +4149,6 @@ def main() -> int:
 
     use_gpu = (
         getattr(args, "gpu", True)
-        if PLATFORM == "darwin" and PROCESSOR != "arm"
-        else getattr(args, "gpu", False)
     )
 
     video_encoding = []
